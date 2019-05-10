@@ -37,8 +37,8 @@ class LIGO():
 
         ax.set_ylim(-1.2E-18, 1.2E-18)
         plt.grid()
-
-        plt.show(block=False)
+        return fig, ax
+        # plt.show(block=False)
     
     def plot_FFT(self, fmin = 40, fmax = 2060):
         # compute PSD using simple FFT
@@ -71,8 +71,8 @@ class LIGO():
         # plot the periodogram
         ax[1].loglog(1. / f, PSD, '-')
         ax[1].set(xlabel='period (days)',ylabel='PSD')
-
-        plt.show(block=False)
+        return fig, ax
+        # plt.show(block=False)
 
     
     def plot_Welch_Periodogram(self, fmin = 40, fmax = 2060):
@@ -102,8 +102,8 @@ class LIGO():
         # plot the periodogram
         ax[1].loglog(1. / fW2, PSDW2, '-')
         ax[1].set(xlabel='period (days)',ylabel='PSD')
-
-        plt.show(block=False)
+        return fig, ax
+        # plt.show(block=False)
 
     def plot_Lomb_Scargle_Periodogram(self):
         from astropy.stats import LombScargle
@@ -125,8 +125,8 @@ class LIGO():
         # plot the periodogram
         ax[1].plot(1. / frequency, power)
         ax[1].set(xlabel='period (days)',ylabel='Lomb-Scargle Power')
-
-        plt.show(block=False)
+        return fig, ax
+        # plt.show(block=False)
     
     def calculate_ACF(self, lags = None):
         from statsmodels.tsa.stattools import acf
@@ -137,19 +137,22 @@ class LIGO():
         # print(len(acf))
         
         fig = plt.figure(figsize=(12, 8))
+        ax=plt.gca()
         if lags is None:
             plot_acf(self.dplot, ax=plt.gca())
         else:
             plot_acf(self.dplot, ax=plt.gca(), lags = lags)
         
-        plt.show(block=False)
-        return acf
+        return fig, ax
+        # plt.show(block=False)
+        # return acf
     
     def calculate_PACF(self, lags = None):
         from statsmodels.tsa.stattools import pacf
         from statsmodels.graphics.tsaplots import plot_pacf
 
         pacf = pacf(self.dplot)
+        ax=plt.gca()
         # print(pacf)
         # print(len(pacf))
         
@@ -159,8 +162,9 @@ class LIGO():
         else:
             plot_pacf(self.dplot, ax=plt.gca(), lags = lags)
         
-        plt.show(block=False)
-        return pacf
+        return fig, ax
+        # plt.show(block=False)
+        # return pacf
     
     def arima(self,p = 0, d = 0, q = 0):
         from statsmodels.tsa.arima_model import ARIMA
