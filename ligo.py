@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from matplotlib import pyplot as plt
 from scipy import fftpack
 from matplotlib import mlab
@@ -161,6 +162,39 @@ class LIGO():
         plt.show(block=False)
         return pacf
     
+    def arima(self,p = 0, d = 0, q = 0):
+        from statsmodels.tsa.arima_model import ARIMA
+       
+        # fit model
+        model = ARIMA(self.dplot, order=(p,d,q))
+        model_fit = model.fit(disp=0)
+        print(model_fit.summary())
+        # plot residual errors
+        residuals = pd.DataFrame(model_fit.resid)
+        residuals.plot()
+        plt.show()
+        residuals.plot(kind='kde')
+        plt.show()
+        print(residuals.describe())
+    
+    def plot_seasonality_trends(self):
+        # conversion to datetime from MJD, in a dataframe
+        import pandas as pd
+        from astropy.time import Time
+
+        data = {'time':self.tplot,'values':self.dplot}
+        df = pd.DataFrame(data)
+        df = df.set_index('time')
+
+        # Seasonality and trends in time series data
+        import statsmodels.api as sm
+        from pylab import rcParams
+        rcParams['figure.figsize'] = 12, 5
+        decomposition = sm.tsa.seasonal_decompose(df, model='additive', freq = 1)
+        decomposition.plot()
+
+        plt.show(block=False)
+    
 
 if __name__=='__main__':
     ligo = LIGO()
@@ -170,6 +204,8 @@ if __name__=='__main__':
     ligo.plot_Lomb_Scargle_Periodogram()
     ligo.calculate_ACF()
     ligo.calculate_PACF()
+    ligo.arima(10,0,0)
+    ligo.plot_seasonality_trends()
     
     plt.show()
             

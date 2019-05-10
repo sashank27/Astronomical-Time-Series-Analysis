@@ -95,6 +95,10 @@ class LINEAR():
 
         plt.show(block=False)
     
+def get_linear_id_list():
+    data = fetch_LINEAR_sample()
+    return data.ids
+
 if __name__=='__main__':
     linear = LINEAR()
     linear.plot_light_curve()
