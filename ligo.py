@@ -174,12 +174,29 @@ class LIGO():
         model_fit = model.fit(disp=0)
         print(model_fit.summary())
         # plot residual errors
+        fig = plt.figure(figsize=(12, 8))
         residuals = pd.DataFrame(model_fit.resid)
-        residuals.plot()
-        plt.show()
-        residuals.plot(kind='kde')
-        plt.show()
-        print(residuals.describe())
+        ax=plt.gca()
+        residuals.plot(ax = plt.gca())
+        return fig, ax
+        # plt.show()
+        # residuals.plot(kind='kde')
+        # plt.show()
+        # print(residuals.describe())
+
+    def arima_kde(self,p = 0, d = 0, q = 0):
+        from statsmodels.tsa.arima_model import ARIMA
+       
+        # fit model
+        model = ARIMA(self.dplot, order=(p,d,q))
+        model_fit = model.fit(disp=0)
+        print(model_fit.summary())
+        # plot residual errors
+        fig = plt.figure(figsize=(12, 8))
+        residuals = pd.DataFrame(model_fit.resid)
+        ax=plt.gca()
+        residuals.plot(kind='kde', ax=plt.gca())
+        return fig, ax
     
     def plot_seasonality_trends(self):
         # conversion to datetime from MJD, in a dataframe
@@ -193,11 +210,13 @@ class LIGO():
         # Seasonality and trends in time series data
         import statsmodels.api as sm
         from pylab import rcParams
+        fig = plt.figure(figsize=(12, 5))
         rcParams['figure.figsize'] = 12, 5
         decomposition = sm.tsa.seasonal_decompose(df, model='additive', freq = 1)
-        decomposition.plot()
-
-        plt.show(block=False)
+        ax=plt.gca()
+        decomposition.plot(ax=plt.gca())
+        return fig, ax
+        # plt.show(block=False)
     
 
 if __name__=='__main__':

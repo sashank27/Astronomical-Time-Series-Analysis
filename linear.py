@@ -31,8 +31,8 @@ class LINEAR():
         ax.set(xlabel='Observation time (days)', 
                 ylabel='Observed Magnitude', 
                 title='LINEAR object {0}'.format(self.id))
-        
-        plt.show(block=False)
+        return fig, ax
+        # plt.show(block=False)
     
     def plot_atocorrelation_function(self):
         from astroML.time_series import ACF
@@ -51,8 +51,8 @@ class LINEAR():
         ax.set(xlabel='Associated Time Differences', 
                 ylabel='Auto correlation function (ACF)')
         plt.grid()
-
-        plt.show(block=False)
+        return fig, ax
+        # plt.show(block=False)
     
     def plot_lomb_scargle(self):
         from astropy.stats import LombScargle
@@ -72,8 +72,8 @@ class LINEAR():
         # plot the periodogram
         ax[1].plot(1. / frequency, power)
         ax[1].set(xlim=(0,100),xlabel='period (days)',ylabel='Lomb-Scargle Power')
-
-        plt.show(block=False)
+        return fig, ax
+        # plt.show(block=False)
     
     def plot_seasonality_trends(self):
         # conversion to datetime from MJD, in a dataframe
